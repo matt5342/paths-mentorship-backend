@@ -4,7 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-/Users/mattsewell/Development/pathsmentorship/backend/paths-backend/src/main/resources/application.properties
+# Eclipse
+src/main/resources/application.properties
+
 
 ### STS ###
 .apt_generated
