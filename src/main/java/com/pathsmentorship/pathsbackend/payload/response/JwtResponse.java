@@ -2,6 +2,8 @@ package com.pathsmentorship.pathsbackend.payload.response;
 
 import java.util.List;
 
+import com.pathsmentorship.pathsbackend.models.School;
+
 public class JwtResponse {
 	private String token;
 	private String type = "Bearer";
@@ -10,15 +12,18 @@ public class JwtResponse {
 	private String email;
 	private String firstName;
 	private String lastName;
+	private School school;
 	private List<String> roles;
 
-	public JwtResponse(String accessToken, Long id, String username, String email, String firstName, String lastName, List<String> roles) {
+	public JwtResponse(String accessToken, Long id, String username, String email, 
+						String firstName, String lastName, School school, List<String> roles) {
 		this.token = accessToken;
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.school = school;
 		this.roles = roles;
 	}
 
@@ -76,6 +81,14 @@ public class JwtResponse {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public School getSchool() {
+		return school;
+	}
+
+	public void setSchool(School school) {
+		this.school = school;
 	}
 
 	public List<String> getRoles() {

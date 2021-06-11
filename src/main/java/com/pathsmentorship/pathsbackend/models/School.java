@@ -1,35 +1,33 @@
 package com.pathsmentorship.pathsbackend.models;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="roles")
-public class Role {
+@Table(name="schools")
+public class School {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(length=20)
-	private ERole name;
-	
+
+	@NotNull
+	private String name;
+
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "access_code_id")
 //	private AccessCode accessCode;
 	
-	public Role() {}
+	public School() {}
 
-	public Role(ERole name) {
+	public School(String name) {
 		this.name = name;
 	}
 
@@ -41,11 +39,11 @@ public class Role {
 		this.id = id;
 	}
 
-	public ERole getName() {
+	public String getName() {
 		return name;
 	}
 
-	public void setName(ERole name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -56,7 +54,6 @@ public class Role {
 //	public void setAccessCode(AccessCode accessCode) {
 //		this.accessCode = accessCode;
 //	}
-	
 	
 	
 }
