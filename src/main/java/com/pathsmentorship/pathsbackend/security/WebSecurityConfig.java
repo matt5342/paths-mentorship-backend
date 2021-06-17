@@ -47,7 +47,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //          .withUser("spring")
 //          .password("{noop}secret")
 //          .roles("USER");
-		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(NoOpPasswordEncoder.getInstance());
+//		authenticationManagerBuilder.inMemoryAuthentication().withUser("user1").password("test123").roles("MENTOR");
+//		authenticationManagerBuilder.inMemoryAuthentication().withUser("user2").password("test123").roles("STUDENT");
+//		authenticationManagerBuilder.inMemoryAuthentication().withUser("user3").password("test123").roles("PARENT");
+//		authenticationManagerBuilder.inMemoryAuthentication().withUser("user4").password("test123").roles("ADMIN");
+//		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(NoOpPasswordEncoder.getInstance());
+		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
 	@Override

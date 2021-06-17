@@ -68,12 +68,12 @@ public class User {
 	
 	public User() {}
 
-	public User(String username, String email,
-			String password, School school) {
+	public User(String username, String email, String password, String firstName, String lastName) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.school = school;
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
 	public Long getId() {
@@ -139,12 +139,6 @@ public class User {
 
 	public void setSchool(School school) {
 		this.school = school;
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
-				+ ", firstName=" + firstName + ", lastName=" + lastName + ", roles=" + roles + "]";
 	}
 	
 	

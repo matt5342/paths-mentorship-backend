@@ -2,6 +2,7 @@ package com.pathsmentorship.pathsbackend.controllers;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -65,32 +67,36 @@ public class AuthController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-//		System.out.println("login request: " + loginRequest);
-		System.out.println("login request pw: " + loginRequest.getPassword());
-		System.out.println("login request pw encoded: " + encoder.encode(loginRequest.getPassword()));
+//		System.out.println("login request username: " + loginRequest.getUsername());
+//		System.out.println("login request pw: " + loginRequest.getPassword());
+//		System.out.println("login request pw encoded: " + encoder.encode(loginRequest.getPassword()));
 		
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-		System.out.println("authentication: " + authentication);
+		
+		User currentUser = userRepository.findByUsername(loginRequest.getUsername())
+				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + loginRequest.getUsername()));
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		
-		System.out.println("jwt: " + jwt);
+//		System.out.println("jwt: " + jwt);
 		
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
+//		System.out.println("authController: authUser lastName: " + userDetails.getLastName());
+//		System.out.println("authController: authUser getPrincipal: " + authentication.getPrincipal());
+		
 		return ResponseEntity.ok(new JwtResponse(jwt, 
 												 userDetails.getId(), 
 												 userDetails.getUsername(), 
 												 userDetails.getEmail(), 
 												 userDetails.getFirstName(),
-												 userDetails.getLastName(),
-												 userDetails.getSchool(), 
+												 currentUser.getLastName(),
+												 userDetails.getSchool().getName(), 
 												 roles));
 	}
 
@@ -115,29 +121,34 @@ public class AuthController {
 
 		// Create new user's account
 //		System.out.println(signUpRequest);
-//		System.out.println(signUpRequest.getLastName());
+//		System.out.println("Sign Up request lastName: " + signUpRequest.getLastName());
+//		System.out.println("Sign Up request username: " + signUpRequest.getUsername());
+//		System.out.println("Sign up request Password: " + signUpRequest.getPassword());
 		
-		String pwStr = encoder.encode(signUpRequest.getPassword());
 		
-		System.out.println("pwStr: " + pwStr);
-		System.out.println("sign up encoded pw: " + encoder.encode(signUpRequest.getPassword()));
+//		System.out.println("pwStr: " + pwStr);
+//		System.out.println("sign up encoded pw: " + encoder.encode(signUpRequest.getPassword()));
 
 		
 //		User user = new User(signUpRequest.getUsername(), 
 //							 signUpRequest.getEmail(),
-//							 encoder.encode(signUpRequest.getPassword()));
+//							 encoder.encode(signUpRequest.getPassword()),
+//							 signUpRequest.getFirstName(),
+//							 signUpRequest.getLastName()
+//							 );
 		User user = new User();
 		user.setUsername(signUpRequest.getUsername());
 		user.setEmail(signUpRequest.getEmail());
-//		user.setPassword(encoder.encode(signUpRequest.getPassword()));
+		user.setPassword(encoder.encode(signUpRequest.getPassword()));
+		user.setLastName(signUpRequest.getLastName());
+		user.setFirstName(signUpRequest.getFirstName());
 
 		
-		user.setPassword(pwStr);
+//		String pwStr = encoder.encode(signUpRequest.getPassword());
+//		user.setPassword(pwStr);
 //		System.out.println(user);
-		user.setFirstName(signUpRequest.getFirstName());
-		user.setLastName(signUpRequest.getLastName());
 		
-		System.out.println("user to save encoded pw: " + user.getPassword());
+//		System.out.println("user to save encoded pw: " + user.getPassword());
 		
 		// parse access code
 		String strAccessCode = signUpRequest.getAccessCode();
@@ -147,13 +158,9 @@ public class AuthController {
 		
 		
 		// find school name from access code
-		if (accessCode.getSchoolName() == null) {
-			school = schoolRepository.findByName("Alexandria City Public Schools")
-					.orElseThrow(() -> new RuntimeException("Error: School is not found"));
-		} else {
-			school = schoolRepository.findByName(accessCode.getSchoolName())
-					.orElseThrow(() -> new RuntimeException("Error: School is not found"));
-		}
+		school = schoolRepository.findByName(accessCode.getSchoolName())
+				.orElseThrow(() -> new RuntimeException("Error: School is not found"));
+		
 		user.setSchool(school);
 //		System.out.println(user);
 		
@@ -193,6 +200,7 @@ public class AuthController {
 		
 
 		user.setRoles(roles);
+		
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
