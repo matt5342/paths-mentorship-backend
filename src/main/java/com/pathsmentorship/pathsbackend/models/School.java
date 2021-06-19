@@ -15,27 +15,22 @@ public class School {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer id;
-	
+	private Long id;
 
 	@NotNull
 	private String name;
 
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "access_code_id")
-//	private AccessCode accessCode;
-	
 	public School() {}
 
 	public School(String name) {
 		this.name = name;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -46,14 +41,5 @@ public class School {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-//	public AccessCode getAccessCode() {
-//		return accessCode;
-//	}
-//
-//	public void setAccessCode(AccessCode accessCode) {
-//		this.accessCode = accessCode;
-//	}
-	
 	
 }

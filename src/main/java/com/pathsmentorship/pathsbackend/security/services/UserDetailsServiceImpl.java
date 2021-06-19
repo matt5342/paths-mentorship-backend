@@ -1,5 +1,9 @@
 package com.pathsmentorship.pathsbackend.security.services;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
 	UserRepository userRepository;
-	
+		
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -28,4 +32,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		
 		return UserDetailsImpl.build(user);
 	}
+	
+
 }
