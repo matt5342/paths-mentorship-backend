@@ -124,18 +124,7 @@ public class AuthController {
 //		System.out.println("Sign Up request lastName: " + signUpRequest.getLastName());
 //		System.out.println("Sign Up request username: " + signUpRequest.getUsername());
 //		System.out.println("Sign up request Password: " + signUpRequest.getPassword());
-		
-		
-//		System.out.println("pwStr: " + pwStr);
-//		System.out.println("sign up encoded pw: " + encoder.encode(signUpRequest.getPassword()));
 
-		
-//		User user = new User(signUpRequest.getUsername(), 
-//							 signUpRequest.getEmail(),
-//							 encoder.encode(signUpRequest.getPassword()),
-//							 signUpRequest.getFirstName(),
-//							 signUpRequest.getLastName()
-//							 );
 		User user = new User();
 		user.setUsername(signUpRequest.getUsername());
 		user.setEmail(signUpRequest.getEmail());
