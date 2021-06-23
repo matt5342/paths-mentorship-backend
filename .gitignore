@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 
 # Eclipse
-src/main/resources/application.properties
+# src/main/resources/application.properties
 
 
 ### STS ###
